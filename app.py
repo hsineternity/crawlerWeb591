@@ -36,7 +36,6 @@ findBase = {
 @app.route("/esay", methods=['GET'])
 def getHouse():
     findBodys = json.loads(request.get_data().decode('utf8'))
-    print(findBodys)
     rt1= es.search(body=findBodys)
     return jsonify(rt1)
 

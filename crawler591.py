@@ -16,8 +16,7 @@ def getBriefContent( number ):
   soup = BeautifulSoup( response.content, 'lxml' ) 
   page = soup.find_all("a", class_="pageNum-form")[-1].get_text()
   
-  # for i in range(int(page)) :
-  for i in range(int(1)) :
+  for i in range(int(page)) :
     response = requests.get( url, headers=headers, params={ 'firstRow' : i*30} )
     soup = BeautifulSoup( response.content, 'lxml' ) 
 
@@ -63,14 +62,6 @@ def getDetailContent( url ):
 
 def main():
   es = Elasticsearch()
-  # bb1={
-  #   "query" : {
-  #              "match" : {"_type" : "house" }
-  #               }
-  #    }
-  # rt1= es.search(index="taipei", size=30)
-  # rt1= es.get(index='taipei', doc_type='house', id=8491925)
-  # print(rt1)
   countyHouseUrls = {}
   
   # 縣市
@@ -82,13 +73,9 @@ def main():
   for k, v in countyHouseUrls.items():
     for url in v :
       houseId = re.findall(r'\d+', url)[-1]
-      # houseDetail['id'] = houseId
-      # houseDetail['county'] = k
       houseDetail = getDetailContent(url)
-
-      # houseDetail.update(getDetailContent(url))
       es.index( index=k, doc_type='house' , id=houseId, body=houseDetail )
-      print(k, houseId)
+
 
 if __name__ == "__main__":
   main()  
